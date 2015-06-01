@@ -106,12 +106,12 @@
 // 110 is Pt100 with 1k pullup (non standard)
 
 #if MOTHERBOARD == 555
-  //#define MAGNUM_PLA
-  //#define MACHINE_MODEL "PLA"
+  #define MAGNUM_PLA
+  #define MACHINE_MODEL "PLA"
   //#define MAGNUM_UNI
   //#define MACHINE_MODEL "UNI"
-  #define MAGNUM_PRO
-  #define MACHINE_MODEL "PRO"
+  //#define MAGNUM_PRO
+  //#define MACHINE_MODEL "PRO"
   //#define MAGNUM_EDU
   //#define MACHINE_MODEL "EDU"
   //#define MODUS
@@ -126,7 +126,9 @@
  #define CUSTOM_MENDEL_NAME "Magnum 3D gen.2"
  #define MACHINE_UUID "ee4e69c4-d111-4c45-b992-7a67e108c6d8"  //MG gen. 2
  //#define FIRMWARE_VERSION "Magnum-" MACHINE_MODEL "-B03-F4g" //до переезда на новый марлин
- #define FIRMWARE_VERSION "Magnum-" MACHINE_MODEL "-B03-F5a"
+ 
+ #define FIRMWARE_VERSION "Magnum-" MACHINE_MODEL "-B03-T5c" // без термозащиты стола
+ //#define FIRMWARE_VERSION "Magnum-" MACHINE_MODEL "-B03-E5b"
 
  #define TEMP_SENSOR_0 1
 
@@ -180,9 +182,15 @@
 // This feature exists to protect your hotend from overheating accidentally, but *NOT* from thermistor short/failure!
 // You should use MINTEMP for thermistor short/failure protection.
 #if MOTHERBOARD == 555
-#define HEATER_0_MAXTEMP 320
-#define HEATER_1_MAXTEMP 320
-#define HEATER_2_MAXTEMP 320
+  #if defined(MAGNUM_PLA) || defined(MAGNUM_TT)
+	#define HEATER_0_MAXTEMP 260
+	#define HEATER_1_MAXTEMP 260
+	#define HEATER_2_MAXTEMP 260
+  #else
+	#define HEATER_0_MAXTEMP 320
+	#define HEATER_1_MAXTEMP 320
+	#define HEATER_2_MAXTEMP 320  
+  #endif
 #define BED_MAXTEMP 130
 
 #undef TEMP_RESIDENCY_TIME
@@ -290,7 +298,7 @@
 //can be software-disabled for whatever purposes by
 #define PREVENT_DANGEROUS_EXTRUDE
 //if PREVENT_DANGEROUS_EXTRUDE is on, you can still disable (uncomment) very long bits of extrusion separately.
-#define PREVENT_LENGTHY_EXTRUDE
+//#define PREVENT_LENGTHY_EXTRUDE глючило на PRO
 
 #define EXTRUDE_MINTEMP 170
 #define EXTRUDE_MAXLENGTH (X_MAX_LENGTH+Y_MAX_LENGTH) //prevent extrusion of very large distances.
@@ -333,8 +341,11 @@ your extruder heater takes 2 minutes to hit the target on heating.
 #if MOTHERBOARD == 555
   #define THERMAL_RUNAWAY_PROTECTION_PERIOD 60 //in seconds
   #define THERMAL_RUNAWAY_PROTECTION_HYSTERESIS 25 // in degree Celsius
-  #define THERMAL_RUNAWAY_PROTECTION_BED_PERIOD 60 //in seconds
-  #define THERMAL_RUNAWAY_PROTECTION_BED_HYSTERESIS 15 // in degree Celsius
+ // не включать для стола - постоянно вылетает
+ // ставим температуру, ждем когда достигнет. Меняем на другую (ставим выше) - 
+ // Все, получаем THERMAL RUNAWAY, если ставить ниже то ок.
+ // #define THERMAL_RUNAWAY_PROTECTION_BED_PERIOD 60 //in seconds
+ // #define THERMAL_RUNAWAY_PROTECTION_BED_HYSTERESIS 15 // in degree Celsius
 #endif // MOTHERBOARD 555 MG
 //===========================================================================
 
@@ -623,21 +634,16 @@ const bool Z_MAX_ENDSTOP_INVERTING = true; // set to true to invert the logic of
 
 #define NUM_AXIS 4 // The axis order in all axis related arrays is X, Y, Z, E
 #define HOMING_FEEDRATE {5000, 5000, 600, 0}  // set the homing speeds (mm/min)
-
-//#if defined(MODUS)
-// #define DEFAULT_AXIS_STEPS_PER_UNIT   {100, 100, 200.0*16/0.8, 145.59*1.09} //Шпилька М5 шаг 0.8
-// #define DEFAULT_MAX_FEEDRATE          {150, 150, 3, 15}    // (mm/sec)
-//#else
- #define DEFAULT_AXIS_STEPS_PER_UNIT   {100, 100, 200.0*16/3, 145.59*1.09}
- #define DEFAULT_MAX_FEEDRATE          {150, 150, 15, 15}    // (mm/sec)
-//#endif
+#define DEFAULT_AXIS_STEPS_PER_UNIT   {100, 100, 200.0*16/3, 145.59*1.09}
 #define DEFAULT_MAX_ACCELERATION      {3000,3000,100,3000}    // X, Y, Z, E maximum start speed for accelerated moves. E default values are good for skeinforge 40+, for older versions raise them a lot.
 
 #if defined(MAGNUM_PRO)
+ #define DEFAULT_MAX_FEEDRATE          {120, 120, 15, 15}    // (mm/sec)
  #define DEFAULT_ACCELERATION          1200    // X, Y, Z and E max acceleration in mm/s^2 for printing moves
  #define DEFAULT_XYJERK                7.0    // (mm/sec)
 #else
- #define DEFAULT_ACCELERATION          1500    // X, Y, Z and E max acceleration in mm/s^2 for printing moves
+ #define DEFAULT_MAX_FEEDRATE          {150, 150, 15, 15}    // (mm/sec)
+ #define DEFAULT_ACCELERATION          1000    // X, Y, Z and E max acceleration in mm/s^2 for printing moves
  #define DEFAULT_XYJERK                10.0    // (mm/sec)
 #endif
 #define DEFAULT_RETRACT_ACCELERATION  3000   // X, Y, Z and E max acceleration in mm/s^2 for retracts

@@ -784,8 +784,6 @@ static void lcd_control_menu()
 }
 
 //MG Addons menu +
-bool pasta_enabled = false;
-
 void init_pasta() {
 	if (pasta_enabled) {
 		// DISABLE all E0
