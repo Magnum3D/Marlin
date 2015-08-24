@@ -13,6 +13,9 @@
   void lcd_reset_alert_level();
   bool lcd_detected(void);
 
+  //MG
+  void init_pasta();
+  
 #ifdef DOGLCD
   extern int lcd_contrast;
   void lcd_setcontrast(uint8_t value);

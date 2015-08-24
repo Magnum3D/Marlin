@@ -204,9 +204,86 @@
 //===========================================================================
 //=============================public variables=============================
 //===========================================================================
-//MG
+//MG ++
 bool pasta_enabled = false;
+void init_pasta() {
+	if (pasta_enabled) {
+		// DISABLE all E0
+		disable_e0();
+		
+		// ENABLE ALL E3
+		SET_OUTPUT(E3_DIR_PIN);
+		SET_OUTPUT(E3_ENABLE_PIN);
+		WRITE(E3_ENABLE_PIN,E_ENABLE_ON);
+		SET_OUTPUT(E3_STEP_PIN);
+		WRITE(E3_STEP_PIN,INVERT_E_STEP_PIN);
+		WRITE(E3_ENABLE_PIN,!E_ENABLE_ON);
+		
+		float temp = .0;
+	    set_extrude_min_temp(temp);
+		
+		// #define DEFAULT_AXIS_STEPS_PER_UNIT   {100, 100, 200.0*16/3, 145.59*1.09}
+		// #define DEFAULT_MAX_ACCELERATION      {3000,3000,100,3000}
+		//long tmp3[]=DEFAULT_MAX_ACCELERATION;
+	
+		//float tmp1[]={100, 100, 200.0*16/3, 200.0*16/3}; //Pasta 1
+		float tmp1[]={100, 100, 200.0*16/3, 200.0*16*2.5/3}; //Pasta 3
+		float tmp2[]={70, 70, 15, 5};    // (mm/sec)
+		long tmp3[]={200,200,100,300}; //DEFAULT_MAX_ACCELERATION
+		for (short i=0;i<4;i++) 
+		{
+			axis_steps_per_unit[i]=tmp1[i];  
+			max_feedrate[i]=tmp2[i];  
+			max_acceleration_units_per_sq_second[i]=tmp3[i];
+		}
+	
+		// steps per sq second need to be updated to agree with the units per sq second
+		reset_acceleration_rates();
+    	acceleration=200;
+		max_xy_jerk=3;
+		max_e_jerk=3;
+		/*
+		retract_acceleration=DEFAULT_RETRACT_ACCELERATION;
+		minimumfeedrate=DEFAULT_MINIMUMFEEDRATE;
+		minsegmenttime=DEFAULT_MINSEGMENTTIME;       
+		mintravelfeedrate=DEFAULT_MINTRAVELFEEDRATE;
+		max_z_jerk=DEFAULT_ZJERK;
+		*/
+	} else {
+		// DISABLE ALL E3
+		WRITE(E3_ENABLE_PIN, !E_ENABLE_ON);
+		
+		set_extrude_min_temp(EXTRUDE_MINTEMP);
 
+		//long tmp3[]=DEFAULT_MAX_ACCELERATION;
+
+		float tmp1[]=DEFAULT_AXIS_STEPS_PER_UNIT;
+		float tmp2[]=DEFAULT_MAX_FEEDRATE;
+		long tmp3[]=DEFAULT_MAX_ACCELERATION;
+		for (short i=0;i<4;i++) 
+		{
+			axis_steps_per_unit[i]=tmp1[i];  
+			max_feedrate[i]=tmp2[i];  
+			max_acceleration_units_per_sq_second[i]=tmp3[i];
+		}
+	
+		// steps per sq second need to be updated to agree with the units per sq second
+		reset_acceleration_rates();
+    
+		acceleration=DEFAULT_ACCELERATION;
+		max_xy_jerk=DEFAULT_XYJERK;
+		max_e_jerk=DEFAULT_EJERK;
+		/*
+		retract_acceleration=DEFAULT_RETRACT_ACCELERATION;
+		minimumfeedrate=DEFAULT_MINIMUMFEEDRATE;
+		minsegmenttime=DEFAULT_MINSEGMENTTIME;       
+		mintravelfeedrate=DEFAULT_MINTRAVELFEEDRATE;
+		max_z_jerk=DEFAULT_ZJERK;
+		*/
+	}
+	
+}
+// MG--
 #ifdef SDSUPPORT
 CardReader card;
 #endif
@@ -2761,7 +2838,7 @@ Sigma_Exit:
       break;
     case 115: // M115
       SERIAL_PROTOCOLPGM(MSG_M115_REPORT);
-	  if (pasta_enabled) {
+	  if (pasta_enabled) { //MG
 		SERIAL_PROTOCOLPGM("Magnum Pasta Extruder ENABLED");
 		SERIAL_PROTOCOLPGM(" ");
 	  }
@@ -3836,15 +3913,25 @@ case 404:  //M404 Enter the nominal filament width (3mm, 1.75mm ) N<3.0> or disp
       {
         case 0:
 		  pasta_enabled = false;
-		  //init_pasta();
+		  init_pasta();
 		  SERIAL_PROTOCOLPGM("Magnum Pasta Extruder DISABLED");
           break;
         case 1:
 		  pasta_enabled = true;
-		  //init_pasta();
+		  init_pasta();
 		  SERIAL_PROTOCOLPGM("Magnum Pasta Extruder ENABLED");
           break;
-      }
+      } else {
+		switch(pasta_enabled) //Pasta Extruder Status
+		{
+		case false:
+		  SERIAL_PROTOCOLPGM("Magnum Pasta Extruder DISABLED");
+          break;
+        case true:
+		  SERIAL_PROTOCOLPGM("Magnum Pasta Extruder ENABLED");
+          break;
+		}
+	  }
 	  SERIAL_ECHO(" ");
     }
     break;

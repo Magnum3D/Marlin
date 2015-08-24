@@ -106,10 +106,10 @@
 // 110 is Pt100 with 1k pullup (non standard)
 
 #if MOTHERBOARD == 555
-  #define MAGNUM_PLA
-  #define MACHINE_MODEL "PLA"
-  //#define MAGNUM_UNI
-  //#define MACHINE_MODEL "UNI"
+  //#define MAGNUM_PLA
+  //#define MACHINE_MODEL "PLA"
+  #define MAGNUM_UNI
+  #define MACHINE_MODEL "UNI"
   //#define MAGNUM_PRO
   //#define MACHINE_MODEL "PRO"
   //#define MAGNUM_EDU
@@ -123,13 +123,12 @@
  
  #undef  STRING_CONFIG_H_AUTHOR
  #define STRING_CONFIG_H_AUTHOR "(Irwin co., Magnum 3D)"
- #define CUSTOM_MENDEL_NAME "Magnum 3D gen.2"
+ #define CUSTOM_MENDEL_NAME "Magnum-3D-gen.2"
  #define MACHINE_UUID "ee4e69c4-d111-4c45-b992-7a67e108c6d8"  //MG gen. 2
  //#define FIRMWARE_VERSION "Magnum-" MACHINE_MODEL "-B03-F4g" //до переезда на новый марлин
+ //#define FIRMWARE_VERSION "Magnum-" MACHINE_MODEL "-B03-T5c" // без термозащиты стола
+ #define FIRMWARE_VERSION "Magnum-" MACHINE_MODEL "-B03-T5d" // SOFT PWM FAN
  
- #define FIRMWARE_VERSION "Magnum-" MACHINE_MODEL "-B03-T5c" // без термозащиты стола
- //#define FIRMWARE_VERSION "Magnum-" MACHINE_MODEL "-B03-E5b"
-
  #define TEMP_SENSOR_0 1
 
   #if defined(MAGNUM_PRO) || defined(EXTERNAL_EXTRUDER)
@@ -921,7 +920,7 @@ const bool Z_MAX_ENDSTOP_INVERTING = true; // set to true to invert the logic of
 // Use software PWM to drive the fan, as for the heaters. This uses a very low frequency
 // which is not ass annoying as with the hardware PWM. On the other hand, if this frequency
 // is too low, you should also increment SOFT_PWM_SCALE.
-//#define FAN_SOFT_PWM
+#define FAN_SOFT_PWM
 
 // Incrementing this by 1 will double the software PWM frequency,
 // affecting heaters, and the fan if FAN_SOFT_PWM is enabled.
