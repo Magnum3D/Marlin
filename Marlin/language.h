@@ -55,7 +55,9 @@
   #endif
 
 // Default firmware set to Mendel
-  #define FIRMWARE_URL "https://github.com/MarlinFirmware/Marlin"
+  //MG
+  //#define FIRMWARE_URL "https://github.com/MarlinFirmware/Marlin"
+  #define FIRMWARE_URL "https://github.com/Magnum3D"
 #endif
 
 
