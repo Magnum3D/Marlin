@@ -53,7 +53,6 @@
 #define E0_ENABLE_PIN      19
 
 //Pasta
-
 extern bool pasta_enabled;
 extern bool pasta_dir_enabled;
 #define E3_STEP_PIN         46
@@ -71,22 +70,6 @@ extern bool pasta_dir_enabled;
  #define E1_ENABLE_PIN      44
  #define HEATER_1_PIN       14
  #define TEMP_1_PIN         3
-#endif
-
-#if defined(EXTERNAL_EXTRUDER)
- #if defined(MAGNUM_PRO)
-   #define E2_STEP_PIN        46
-   #define E2_DIR_PIN         37
-   #define E2_ENABLE_PIN      34//BOOT PIN 
-   #define HEATER_2_PIN       13
-   #define TEMP_2_PIN         2
- #else
-   #define E1_STEP_PIN        46
-   #define E1_DIR_PIN         37
-   #define E1_ENABLE_PIN      34//BOOT PIN 
-   #define HEATER_1_PIN       13
-   #define TEMP_1_PIN         2
- #endif
 #endif
 
 #if !defined(HEATER_1_PIN)
