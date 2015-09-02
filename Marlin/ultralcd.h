@@ -13,8 +13,10 @@
   void lcd_reset_alert_level();
   bool lcd_detected(void);
 
-  //MG
-  void init_pasta();
+//MG
+void init_fr_pasta();
+void init_dir_pasta();
+void init_pasta_steps();
   
 #ifdef DOGLCD
   extern int lcd_contrast;

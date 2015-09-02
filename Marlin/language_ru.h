@@ -13,9 +13,10 @@
     #define MSG_SDPRINTING 				        "Печать с SD карты" 	//MG Only
 	#define MSG_FILAMENTCHANGENOW 				" -=  нажмите OK =- " 	//MG Only
 	#define MSG_MG_EXTEND 						"Дополнения Magnum"			//MG Only
-	#define MSG_MG_PASTA_ENABLE 				"Паста " 		//MG Only
-	#define MSG_MG_PASTA_DIA 					"Изм. Df " 		//MG Only
-	#define MSG_MG_PASTA_AUTOZ 					"Авто Zm " 		//MG Only	
+	#define MSG_MG_PASTA_ENABLE 				"Паста FR" 		//MG Only
+	#define MSG_MG_PASTA_ENABLE_DIR				"Паста DIR" 		//MG Only
+	//#define MSG_MG_PASTA_DIA 					"Изм. Df " 		//MG Only
+	//#define MSG_MG_PASTA_AUTOZ 					"Авто Zm " 		//MG Only	
 
 	#define WELCOME_MSG 				        "-= готов к печати =-"
 	#define MSG_SD_INSERTED						"Карта вставлена"

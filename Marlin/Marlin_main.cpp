@@ -205,8 +205,23 @@
 //=============================public variables=============================
 //===========================================================================
 //MG ++
-bool pasta_enabled = false;
-void init_pasta() {
+bool pasta_enabled = false; // через разъем расширения
+bool pasta_dir_enabled = false; // подключение напрямую
+
+void init_fr_pasta();
+void init_dir_pasta();
+void init_pasta_steps();
+ 
+void init_dir_pasta() { 
+	if (pasta_enabled) {
+	  pasta_enabled = false;
+	  // DISABLE ALL E3
+	  WRITE(E3_ENABLE_PIN, !E_ENABLE_ON);
+	}
+	init_pasta_steps();
+}
+void init_fr_pasta() { 
+	  pasta_dir_enabled = false;
 	if (pasta_enabled) {
 		// DISABLE all E0
 		disable_e0();
@@ -218,7 +233,14 @@ void init_pasta() {
 		SET_OUTPUT(E3_STEP_PIN);
 		WRITE(E3_STEP_PIN,INVERT_E_STEP_PIN);
 		WRITE(E3_ENABLE_PIN,!E_ENABLE_ON);
-		
+	} else {
+	  // DISABLE ALL E3
+	  WRITE(E3_ENABLE_PIN, !E_ENABLE_ON);	
+	}
+	init_pasta_steps();
+}
+void init_pasta_steps() {
+	if (pasta_enabled || pasta_dir_enabled) {
 		float temp = .0;
 	    set_extrude_min_temp(temp);
 		
@@ -250,9 +272,6 @@ void init_pasta() {
 		max_z_jerk=DEFAULT_ZJERK;
 		*/
 	} else {
-		// DISABLE ALL E3
-		WRITE(E3_ENABLE_PIN, !E_ENABLE_ON);
-		
 		set_extrude_min_temp(EXTRUDE_MINTEMP);
 
 		//long tmp3[]=DEFAULT_MAX_ACCELERATION;
@@ -3909,26 +3928,51 @@ case 404:  //M404 Enter the nominal filament width (3mm, 1.75mm ) N<3.0> or disp
 	case 555: // M555 MG Magnum addons
     {
 	  SERIAL_ECHO_START;
-	  if(code_seen('P')) switch((int)code_value()) //Magnum Pasta Extruder
+	  // Для разъема расширений
+	  if(code_seen('PFR')) switch((int)code_value()) //Magnum Pasta Extruder
       {
         case 0:
 		  pasta_enabled = false;
-		  init_pasta();
-		  SERIAL_PROTOCOLPGM("Magnum Pasta Extruder DISABLED");
+		  init_fr_pasta();
+		  SERIAL_PROTOCOLPGM("Magnum Pasta Extruder FR DISABLED");
           break;
         case 1:
 		  pasta_enabled = true;
-		  init_pasta();
-		  SERIAL_PROTOCOLPGM("Magnum Pasta Extruder ENABLED");
+		  init_fr_pasta();
+		  SERIAL_PROTOCOLPGM("Magnum Pasta Extruder FR ENABLED");
           break;
       } else {
 		switch(pasta_enabled) //Pasta Extruder Status
 		{
 		case false:
-		  SERIAL_PROTOCOLPGM("Magnum Pasta Extruder DISABLED");
+		  SERIAL_PROTOCOLPGM("Magnum Pasta Extruder FR DISABLED");
           break;
         case true:
-		  SERIAL_PROTOCOLPGM("Magnum Pasta Extruder ENABLED");
+		  SERIAL_PROTOCOLPGM("Magnum Pasta Extruder FR ENABLED");
+          break;
+		}
+	  }
+		// прямое подключение
+	   if(code_seen('PDIR')) switch((int)code_value()) //Magnum Pasta Extruder
+      {
+        case 0:
+		  pasta_dir_enabled = false;
+		  init_dir_pasta();
+		  SERIAL_PROTOCOLPGM("Magnum Pasta Extruder DIR DISABLED");
+          break;
+        case 1:
+		  pasta_dir_enabled = true;
+		  init_dir_pasta();
+		  SERIAL_PROTOCOLPGM("Magnum Pasta Extruder DIR ENABLED");
+          break;
+      } else {
+		switch(pasta_dir_enabled) //Pasta Extruder Status
+		{
+		case false:
+		  SERIAL_PROTOCOLPGM("Magnum Pasta Extruder DIR DISABLED");
+          break;
+        case true:
+		  SERIAL_PROTOCOLPGM("Magnum Pasta Extruder DIR ENABLED");
           break;
 		}
 	  }

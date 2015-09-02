@@ -788,8 +788,10 @@ static void lcd_control_mg_addons_menu()
 {
 	START_MENU();
 	MENU_ITEM(back, MSG_CONTROL, lcd_control_menu);
-
-	MENU_ITEM_EDIT_CALLBACK(bool, MSG_MG_PASTA_ENABLE, &pasta_enabled, init_pasta);
+	//Приставка с прямым подключением
+	MENU_ITEM_EDIT_CALLBACK(bool, MSG_MG_PASTA_ENABLE_DIR, &pasta_dir_enabled, init_dir_pasta);
+	//Приставка с подключением через разъем
+	MENU_ITEM_EDIT_CALLBACK(bool, MSG_MG_PASTA_ENABLE, &pasta_enabled, init_fr_pasta);
 	//MENU_ITEM_EDIT_CALLBACK(bool, MSG_MG_PASTA_AUTOZ, &pasta_enabled, init_pasta);
 	//MENU_ITEM_EDIT_CALLBACK(bool, MSG_MG_PASTA_DIA, &pasta_enabled, init_pasta);
 /*

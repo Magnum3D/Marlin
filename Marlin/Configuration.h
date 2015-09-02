@@ -108,26 +108,25 @@
 #if MOTHERBOARD == 555
   //#define MAGNUM_PLA
   //#define MACHINE_MODEL "PLA"
-  #define MAGNUM_UNI
-  #define MACHINE_MODEL "UNI"
+  //#define MAGNUM_UNI
+  //#define MACHINE_MODEL "UNI"
   //#define MAGNUM_PRO
   //#define MACHINE_MODEL "PRO"
-  //#define MAGNUM_EDU
-  //#define MACHINE_MODEL "EDU"
+  #define MAGNUM_EDU
+  #define MACHINE_MODEL "EDU"
   //#define MODUS
   //#define MACHINE_MODEL "MODUS-A"
   //#define MAGNUM_TT
   //#define MACHINE_MODEL "TT"
   
- //#define EXTERNAL_EXTRUDER
- 
  #undef  STRING_CONFIG_H_AUTHOR
  #define STRING_CONFIG_H_AUTHOR "(Irwin co., Magnum 3D)"
  #define CUSTOM_MENDEL_NAME "Magnum-3D-gen.2"
  #define MACHINE_UUID "ee4e69c4-d111-4c45-b992-7a67e108c6d8"  //MG gen. 2
  //#define FIRMWARE_VERSION "Magnum-" MACHINE_MODEL "-B03-F4g" //до переезда на новый марлин
  //#define FIRMWARE_VERSION "Magnum-" MACHINE_MODEL "-B03-T5c" // без термозащиты стола
- #define FIRMWARE_VERSION "Magnum-" MACHINE_MODEL "-B03-T5d" // SOFT PWM FAN
+ //#define FIRMWARE_VERSION "Magnum-" MACHINE_MODEL "-B03-T5d" // SOFT PWM FAN
+ #define FIRMWARE_VERSION "Magnum-" MACHINE_MODEL "-B03-T5f" // Добавлена Паста DIR
  
  #define TEMP_SENSOR_0 1
 
@@ -445,11 +444,14 @@ const bool Z_MAX_ENDSTOP_INVERTING = true; // set to true to invert the logic of
  #define Z_MAX_POS_DEFAULT 605
  #define Z_MIN_POS_DEFAULT 0
 #elif defined(MODUS)
- #define X_MAX_POS_DEFAULT 210
+ //#define X_MAX_POS_DEFAULT 210 Modus beta
+ #define X_MAX_POS_DEFAULT 270
  #define X_MIN_POS_DEFAULT 0
- #define Y_MAX_POS_DEFAULT 210
+ //#define Y_MAX_POS_DEFAULT 210 Modus beta
+ #define Y_MAX_POS_DEFAULT 270
  #define Y_MIN_POS_DEFAULT 0
- #define Z_MAX_POS_DEFAULT 210
+ //#define Z_MAX_POS_DEFAULT 210 Modus beta
+ #define Z_MAX_POS_DEFAULT 270
  #define Z_MIN_POS_DEFAULT 0
 #elif defined(MAGNUM_PRO) 
  #define X_MAX_POS_DEFAULT 220
@@ -550,12 +552,26 @@ const bool Z_MAX_ENDSTOP_INVERTING = true; // set to true to invert the logic of
       #define ABL_PROBE_PT_2_Y 20
       #define ABL_PROBE_PT_3_X 170
       #define ABL_PROBE_PT_3_Y 20
+	
+	#if MOTHERBOARD == 555 // MG tmp work
+     // #define ABL_PROBE_PT_1_X 130
+     // #define ABL_PROBE_PT_1_Y 165
+     // #define ABL_PROBE_PT_2_X 220
+     // #define ABL_PROBE_PT_2_Y 2
+     // #define ABL_PROBE_PT_3_X 40
+     // #define ABL_PROBE_PT_3_Y 2
+	#endif
 
   #endif // AUTO_BED_LEVELING_GRID
 
 
   // these are the offsets to the probe relative to the extruder tip (Hotend - Probe)
   // X and Y offsets must be integers
+  #if MOTHERBOARD == 555 // MG tmp work
+	//#define X_PROBE_OFFSET_FROM_EXTRUDER -15
+	//#define Y_PROBE_OFFSET_FROM_EXTRUDER 0
+	//#define Z_PROBE_OFFSET_FROM_EXTRUDER -7
+  #endif
   #define X_PROBE_OFFSET_FROM_EXTRUDER -25
   #define Y_PROBE_OFFSET_FROM_EXTRUDER -29
   #define Z_PROBE_OFFSET_FROM_EXTRUDER -12.35
@@ -702,7 +718,7 @@ const bool Z_MAX_ENDSTOP_INVERTING = true; // set to true to invert the logic of
 // M501 - reads parameters from EEPROM (if you need reset them after you changed them temporarily).
 // M502 - reverts to the default "factory settings".  You still need to store them in EEPROM afterwards if you want to.
 //define this to enable EEPROM support
-//#define EEPROM_SETTINGS
+#define EEPROM_SETTINGS
 //to disable EEPROM Serial responses and decrease program space by ~1700 byte: comment this out:
 // please keep turned on if you can.
 //#define EEPROM_CHITCHAT
@@ -744,7 +760,7 @@ const bool Z_MAX_ENDSTOP_INVERTING = true; // set to true to invert the logic of
 #define EEPROM_CHITCHAT
 #define SDSUPPORT // Enable SD Card Support in Hardware Console
 #define TEMP_STAT_LEDS
- #if defined(MAGNUM_UNI) || defined(MAGNUM_PRO) || defined(MAGNUM_TT)
+ #if defined(MAGNUM_UNI) || defined(MAGNUM_PRO) || defined(MAGNUM_TT) || defined(MODUS)
   #define ULTRA_LCD 
   #define ULTIPANEL
   #define NEWPANEL

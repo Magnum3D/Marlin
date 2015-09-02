@@ -55,6 +55,7 @@
 //Pasta
 
 extern bool pasta_enabled;
+extern bool pasta_dir_enabled;
 #define E3_STEP_PIN         46
 #define E3_DIR_PIN          37
 #define E3_ENABLE_PIN       34
