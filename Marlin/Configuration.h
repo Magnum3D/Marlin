@@ -112,10 +112,10 @@
   //#define MACHINE_MODEL "UNI"
   //#define MAGNUM_PRO
   //#define MACHINE_MODEL "PRO"
-  #define MAGNUM_EDU
-  #define MACHINE_MODEL "EDU"
-  //#define MODUS
-  //#define MACHINE_MODEL "MODUS-A"
+  //#define MAGNUM_EDU
+  //#define MACHINE_MODEL "EDU"
+  #define MODUS
+  #define MACHINE_MODEL "MODUS-A"
   //#define MAGNUM_TT
   //#define MACHINE_MODEL "TT"
   
@@ -444,14 +444,11 @@ const bool Z_MAX_ENDSTOP_INVERTING = true; // set to true to invert the logic of
  #define Z_MAX_POS_DEFAULT 605
  #define Z_MIN_POS_DEFAULT 0
 #elif defined(MODUS)
- //#define X_MAX_POS_DEFAULT 210 Modus beta
- #define X_MAX_POS_DEFAULT 270
+ #define X_MAX_POS_DEFAULT 220
  #define X_MIN_POS_DEFAULT 0
- //#define Y_MAX_POS_DEFAULT 210 Modus beta
- #define Y_MAX_POS_DEFAULT 270
+ #define Y_MAX_POS_DEFAULT 250
  #define Y_MIN_POS_DEFAULT 0
- //#define Z_MAX_POS_DEFAULT 210 Modus beta
- #define Z_MAX_POS_DEFAULT 270
+ #define Z_MAX_POS_DEFAULT 200
  #define Z_MIN_POS_DEFAULT 0
 #elif defined(MAGNUM_PRO) 
  #define X_MAX_POS_DEFAULT 220
