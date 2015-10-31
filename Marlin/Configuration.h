@@ -127,6 +127,7 @@
  //#define FIRMWARE_VERSION "Magnum-" MACHINE_MODEL "-B03-T5c" // без термозащиты стола
  //#define FIRMWARE_VERSION "Magnum-" MACHINE_MODEL "-B03-T5d" // SOFT PWM FAN
  #define FIRMWARE_VERSION "Magnum-" MACHINE_MODEL "-B03-T5f" // Добавлена Паста DIR
+ #define FIRMWARE_VERSION "Magnum-" MACHINE_MODEL "-B03-T5d" // Исправлена команда М555
  
  #define TEMP_SENSOR_0 1
 

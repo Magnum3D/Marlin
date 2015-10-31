@@ -246,36 +246,26 @@ void init_pasta_steps() {
 		
 		// #define DEFAULT_AXIS_STEPS_PER_UNIT   {100, 100, 200.0*16/3, 145.59*1.09}
 		// #define DEFAULT_MAX_ACCELERATION      {3000,3000,100,3000}
-		//long tmp3[]=DEFAULT_MAX_ACCELERATION;
-	
+
 		//float tmp1[]={100, 100, 200.0*16/3, 200.0*16/3}; //Pasta 1
-		float tmp1[]={100, 100, 200.0*16/3, 200.0*16*2.5/3}; //Pasta 3
-		float tmp2[]={70, 70, 15, 5};    // (mm/sec)
+		//float tmp1[]={100, 100, 200.0*16/3, 200.0*16*2.5/3}; //Pasta 3
+		axis_steps_per_unit[3]=200.0*16*2.5/3;
+		float tmp2[]={70, 70, 5, 5};    // (mm/sec)
 		long tmp3[]={200,200,100,300}; //DEFAULT_MAX_ACCELERATION
 		for (short i=0;i<4;i++) 
 		{
-			axis_steps_per_unit[i]=tmp1[i];  
+			//axis_steps_per_unit[i]=tmp1[i];  
 			max_feedrate[i]=tmp2[i];  
 			max_acceleration_units_per_sq_second[i]=tmp3[i];
 		}
-	
 		// steps per sq second need to be updated to agree with the units per sq second
 		reset_acceleration_rates();
     	acceleration=200;
 		max_xy_jerk=3;
+		max_z_jerk=3;
 		max_e_jerk=3;
-		/*
-		retract_acceleration=DEFAULT_RETRACT_ACCELERATION;
-		minimumfeedrate=DEFAULT_MINIMUMFEEDRATE;
-		minsegmenttime=DEFAULT_MINSEGMENTTIME;       
-		mintravelfeedrate=DEFAULT_MINTRAVELFEEDRATE;
-		max_z_jerk=DEFAULT_ZJERK;
-		*/
 	} else {
 		set_extrude_min_temp(EXTRUDE_MINTEMP);
-
-		//long tmp3[]=DEFAULT_MAX_ACCELERATION;
-
 		float tmp1[]=DEFAULT_AXIS_STEPS_PER_UNIT;
 		float tmp2[]=DEFAULT_MAX_FEEDRATE;
 		long tmp3[]=DEFAULT_MAX_ACCELERATION;
@@ -291,13 +281,13 @@ void init_pasta_steps() {
     
 		acceleration=DEFAULT_ACCELERATION;
 		max_xy_jerk=DEFAULT_XYJERK;
+		max_z_jerk=DEFAULT_ZJERK;
 		max_e_jerk=DEFAULT_EJERK;
 		/*
 		retract_acceleration=DEFAULT_RETRACT_ACCELERATION;
 		minimumfeedrate=DEFAULT_MINIMUMFEEDRATE;
 		minsegmenttime=DEFAULT_MINSEGMENTTIME;       
 		mintravelfeedrate=DEFAULT_MINTRAVELFEEDRATE;
-		max_z_jerk=DEFAULT_ZJERK;
 		*/
 	}
 	
@@ -3928,55 +3918,63 @@ case 404:  //M404 Enter the nominal filament width (3mm, 1.75mm ) N<3.0> or disp
 	case 555: // M555 MG Magnum addons
     {
 	  SERIAL_ECHO_START;
-	  // Для разъема расширений
-	  if(code_seen('PFR')) switch((int)code_value()) //Magnum Pasta Extruder
+	  SERIAL_PROTOCOLLN("");
+	  //Magnum Pasta Extruder
+	  //* Для разъема расширений
+	  if(code_seen('PFR'))
       {
-        case 0:
+		switch((int)code_value())
+        {
+		case 0:
 		  pasta_enabled = false;
 		  init_fr_pasta();
-		  SERIAL_PROTOCOLPGM("Magnum Pasta Extruder FR DISABLED");
+		  SERIAL_PROTOCOLPGM("Pasta Extruder FR DISABLED");
           break;
         case 1:
 		  pasta_enabled = true;
 		  init_fr_pasta();
-		  SERIAL_PROTOCOLPGM("Magnum Pasta Extruder FR ENABLED");
-          break;
-      } else {
-		switch(pasta_enabled) //Pasta Extruder Status
-		{
-		case false:
-		  SERIAL_PROTOCOLPGM("Magnum Pasta Extruder FR DISABLED");
-          break;
-        case true:
-		  SERIAL_PROTOCOLPGM("Magnum Pasta Extruder FR ENABLED");
+		  SERIAL_PROTOCOLPGM("Pasta Extruder FR ENABLED");
           break;
 		}
-	  }
-		// прямое подключение
-	   if(code_seen('PDIR')) switch((int)code_value()) //Magnum Pasta Extruder
-      {
+      } else if(code_seen('PDIR')) 
+	  //* прямое подключение
+	  {
+		switch((int)code_value()) 
+		{
         case 0:
 		  pasta_dir_enabled = false;
 		  init_dir_pasta();
-		  SERIAL_PROTOCOLPGM("Magnum Pasta Extruder DIR DISABLED");
+		  SERIAL_PROTOCOLPGM("Pasta Extruder Direct DISABLED");
           break;
         case 1:
 		  pasta_dir_enabled = true;
 		  init_dir_pasta();
-		  SERIAL_PROTOCOLPGM("Magnum Pasta Extruder DIR ENABLED");
+		  SERIAL_PROTOCOLPGM("Pasta Extruder Direct ENABLED");
           break;
+		}
       } else {
-		switch(pasta_dir_enabled) //Pasta Extruder Status
+		//Pasta Extruder Status
+		switch(pasta_enabled) 
 		{
 		case false:
-		  SERIAL_PROTOCOLPGM("Magnum Pasta Extruder DIR DISABLED");
+		  SERIAL_PROTOCOLPGM("Pasta Extruder FR DISABLED");
           break;
         case true:
-		  SERIAL_PROTOCOLPGM("Magnum Pasta Extruder DIR ENABLED");
+		  SERIAL_PROTOCOLPGM("Pasta Extruder FR ENABLED");
+          break;
+		}
+		SERIAL_PROTOCOLLN("");
+		switch(pasta_dir_enabled)
+		{
+		case false:
+		  SERIAL_PROTOCOLPGM("Pasta Extruder Direct DISABLED");
+          break;
+        case true:
+		  SERIAL_PROTOCOLPGM("Pasta Extruder Direct ENABLED");
           break;
 		}
 	  }
-	  SERIAL_ECHO(" ");
+	  SERIAL_PROTOCOLLN("");
     }
     break;
     case 350: // M350 Set microstepping mode. Warning: Steps per unit remains unchanged. S code sets stepping mode for all drivers.
