@@ -652,8 +652,8 @@ const bool Z_MAX_ENDSTOP_INVERTING = true; // set to true to invert the logic of
 
 #if defined(MAGNUM_PRO)
  #define DEFAULT_MAX_FEEDRATE          {120, 120, 15, 15}    // (mm/sec)
- #define DEFAULT_ACCELERATION          1200    // X, Y, Z and E max acceleration in mm/s^2 for printing moves
- #define DEFAULT_XYJERK                7.0    // (mm/sec)
+ #define DEFAULT_ACCELERATION          1000    // X, Y, Z and E max acceleration in mm/s^2 for printing moves
+ #define DEFAULT_XYJERK                5.0    // (mm/sec)
 #else
  #define DEFAULT_MAX_FEEDRATE          {150, 150, 15, 15}    // (mm/sec)
  #define DEFAULT_ACCELERATION          1000    // X, Y, Z and E max acceleration in mm/s^2 for printing moves
